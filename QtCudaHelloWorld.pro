@@ -36,9 +36,13 @@ win32 {
     # Define output directories
     DESTDIR = ..\bin
     CUDA_OBJECTS_DIR = OBJECTS_DIR\..\cuda
-    CUDA_DIR = "E:\cuda\v11.1"                # Path to cuda toolkit install
-    LIBS += -L"E:\cuda\v11.1\lib\x64"
+    #注意文件路径不能有空格！
+    #CUDA_DIR = "E:\cuda\v11.1"                # Path to cuda toolkit install
+    CUDA_DIR = "G:/bin/cuda/NVIDIA_GPU_Computing_Toolkit/v11.1"
+    LIBS += -L"$$CUDA_DIR/lib/x64"
         -lcudart
+    SAMPLE_INCLUDEPATH="G:/bin/cuda/CUDA_Samples"
+
     # MSVCRT link option (static or dynamic, it must be the same with your Qt SDK link option)
     MSVCRT_LINK_FLAG_DEBUG   = "/MDd"
     MSVCRT_LINK_FLAG_RELEASE = "/MD"
@@ -47,7 +51,7 @@ win32 {
     INCLUDEPATH += $$CUDA_DIR\include \
                    $$CUDA_DIR\common/inc \
                    $$CUDA_DIR\..\shared\inc \
-                   "E:\cuda\samples\common\inc"
+                   "$$SAMPLE_INCLUDEPATH/v11.1/common/inc"
 
     # library directories
     QMAKE_LIBDIR += $$CUDA_DIR\lib\$$SYSTEM_NAME \
@@ -70,7 +74,7 @@ win32 {
         # Debug mode
         cuda_d.input = CUDA_SOURCES
         cuda_d.output = $$CUDA_OBJECTS_DIR\${QMAKE_FILE_BASE}_cuda.obj
-        cuda_d.commands = $$CUDA_DIR\bin\nvcc.exe -D_DEBUG $$NVCC_OPTIONS $$CUDA_INC $$LIBS \
+        cuda_d.commands = "$$CUDA_DIR\bin\nvcc.exe" -D_DEBUG $$NVCC_OPTIONS $$CUDA_INC $$LIBS \
                           --machine $$SYSTEM_TYPE -arch=$$CUDA_ARCH \
                           --compile -cudart static -g -DWIN32 -D_MBCS \
                           -Xcompiler "/wd4819,/EHsc,/W3,/nologo,/Od,/Zi,/RTC1" \
